@@ -1,6 +1,7 @@
 import { createSchema } from "graphql-yoga";
 import { buildBabyResponse } from "./responses/responseBuilder.js";
 import { createBabyTips } from "./responses/guides.js";
+import { requestBabyCareAnswer } from "./services/openai.js";
 export const schema = createSchema({
     typeDefs: `
     type ChatResponse {
@@ -30,9 +31,18 @@ export const schema = createSchema({
             tips: (_parent, { ageMonths }) => createBabyTips(ageMonths)
         },
         Mutation: {
-            sendChat: (_parent, { text, ageMonths }) => ({
-                text: buildBabyResponse(text, ageMonths)
-            })
+            sendChat: async (_parent, { text, ageMonths }, { env }) => {
+                const cleanedQuestion = (text ?? "").trim();
+                const safeAge = Math.max(0, Math.floor(ageMonths ?? 0));
+                try {
+                    const aiText = await requestBabyCareAnswer(cleanedQuestion, safeAge, env.OPENAI_API_KEY);
+                    return { text: aiText };
+                }
+                catch (error) {
+                    console.error("OpenAI request failed, falling back:", error);
+                    return { text: buildBabyResponse(cleanedQuestion, safeAge) };
+                }
+            }
         }
     }
 });

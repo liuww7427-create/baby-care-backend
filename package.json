@@ -5,7 +5,7 @@
   "description": "Lightweight GraphQL backend for the BabyCare AI front-end",
   "main": "dist/index.js",
   "scripts": {
-    "clean": "rimraf dist",
+    "clean": "node -e \"import { rmSync } from 'node:fs'; rmSync('./dist', { recursive: true, force: true });\"",
     "build": "tsc",
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js"
@@ -16,9 +16,8 @@
   "devDependencies": {
     "@cloudflare/workers-types": "^4.2024.7",
     "@types/node": "^22.0.0",
-    "rimraf": "^5.0.0",
     "tsx": "^3.12.6",
     "typescript": "^5.2.2",
-    "wrangler": "^3.9.0"
+    "wrangler": "^4.48.0"
   }
 }
