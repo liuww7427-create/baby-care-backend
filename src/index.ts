@@ -6,7 +6,7 @@ const allowedOrigins = [
   ...new Set(
     [
       ...defaultOrigins,
-      ...(process.env.ALLOWED_ORIGINS ?? "")
+      ...(import.meta.env.ALLOWED_ORIGINS ?? "")
         .split(",")
         .map((origin) => origin.trim())
         .filter(Boolean)
