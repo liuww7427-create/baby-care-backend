@@ -1,7 +1,6 @@
-name = "baby-care-backend"
+name = "baby-care-back"
 main = "dist/index.js"
 compatibility_date = "2025-01-01"
-account_id = "<YOUR_ACCOUNT_ID>"
 
 [build]
 command = "npm run build"
